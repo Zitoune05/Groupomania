@@ -29,3 +29,10 @@ Vue.use (iconPlugin)
 
     nav differente
     
+------------------------------------------
+
+<b-form-text id="password-help-block">
+          Your user ID must be 5-12 characters long.
+        </b-form-text>
+
+        
