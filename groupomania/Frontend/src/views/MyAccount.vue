@@ -11,16 +11,13 @@
 
                 <div >
 
-                    <h1>UserID</h1>
+                    <h1>{{ user.name }}</h1>
 
-                    <b-button href="#" style="background-color: rgb(97, 135, 170)">  <b-icon icon="pencil-fill"></b-icon> Modifier mon profil</b-button>
+                    <b-button @click= "update" style="background-color: rgb(97, 135, 170)">  <b-icon icon="pencil-fill"></b-icon> Modifier mon profil</b-button>
 
                     <div class="Userinformation mt-5"> 
-                        <p> UserName:  user.name }}</p>
 
-                        <p> Email:  user.email }}</p>
-
-                        <p> UserBirthday:  user.birthday }}</p>
+                        <p> Email: {{ user.email }}</p>
 
                         <p> Service:  user.service }}</p>
 

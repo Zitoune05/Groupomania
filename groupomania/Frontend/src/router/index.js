@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Contact from '../views/Contact.vue'
 import Signup from '../views/Signup.vue'
-import MyAccount from '../components/MyAccount.vue'
+import MyAccount from '../views/MyAccount.vue'
 
 Vue.use(VueRouter)
 
@@ -29,7 +29,7 @@ const routes = [
     name: 'contact',
     component: Contact
   }
-
+  
 ]
 
 const router = new VueRouter({

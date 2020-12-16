@@ -4,7 +4,7 @@
     <section class="mt-3">
       <b-form  @submit.stop.prevent>
         <label for="feedback-user">User ID</label>
-        <b-form-input v-model="userId" :state="validation" id="feedback-user" style="max-width: 300px; margin: auto;"></b-form-input>
+        <b-form-input  id="feedback-user" style="max-width: 300px; margin: auto;"></b-form-input>
       </b-form>
     </section>
     
@@ -36,7 +36,7 @@
 
   </b-card>
 </template>
-
+<!--v-model="userId" :state="validation"--> 
 <script>
 
 export default {
