@@ -8,7 +8,7 @@ const path = require('path');                     // Pour gérer nos images
 const userRoutes = require('./routes/user');      // Récupération des routes
 const publicationRoutes = require('./routes/publication');
 
-require('dotenv').config();                       // protéger les clés du serveur mongoDB
+require('dotenv').config();                     // protéger les clés du serveur mongoDB
 
 const app = express();
 

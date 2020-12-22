@@ -7,42 +7,73 @@
     </section>
     <hr>
 
-    <form method="POST" @submit.prevent = "envoi">
+    <form method="POST" @submit.prevent = "checkForm">
 
       <section>
         <b-form @submit.stop.prevent>
           <label for="email">Email</label>
-          <b-form-input v-model="email" id="email" type="email" aria-describedby="password-help-block" style="max-width: 300px; margin: auto;"></b-form-input>
+          <b-form-input 
+            id="email"
+            v-model="singupData.email"
+            style="max-width: 300px; margin: auto;"  
+            type="email" 
+            aria-describedby="password-help-block" >
+          </b-form-input>
         </b-form>
       </section>
 
       <section class="mt-3">
         <b-form  @submit.stop.prevent>
           <label for="username">Pseudo</label>
-          <b-form-input v-model="username" id="username" style="max-width: 300px; margin: auto;"></b-form-input>
+          <b-form-input 
+            id="username"
+            v-model="singupData.username"  
+            style="max-width: 300px; margin: auto;"
+            type="text">
+          </b-form-input>
         </b-form>
       </section>
       
       <section>
         <b-form @submit.stop.prevent>
           <label for="password">Password</label>
-          <b-form-input v-model="password" id="password"  type="password" class="text-password" aria-describedby="password-help-block" style="max-width: 300px; margin: auto;"></b-form-input>
+          <b-form-input 
+            id="password"
+            v-model="singupData.password"   
+            type="password" 
+            class="text-password" 
+            aria-describedby="password-help-block" 
+            style="max-width: 300px; margin: auto;">
+          </b-form-input>
         </b-form>
       </section>
 
       <section>
         <b-form @submit.stop.prevent>
           <label for="confirmPassword">Confirm Password</label>
-          <b-form-input v-model="confirmPassword" id="confirmPassword" type="password" class="text-password" aria-describedby="password-help-block" style="max-width: 300px; margin: auto;"></b-form-input>
+          <b-form-input 
+            id="confirmPassword"
+            v-model="singupData.confirmPassword"  
+            type="password" 
+            class="text-password" 
+            aria-describedby="password-help-block" 
+            style="max-width: 300px; margin: auto;"
+          ></b-form-input>
         </b-form>
       </section><hr>
       
-      <b-button variant="outline-primary">CONFIRMER</b-button>
+      <b-button 
+        type="submit"
+        variant="outline-primary"
+      >
+        CONFIRMER
+      </b-button>
 
     </form>  
 
   </b-card>
 </template>
+
 <script>
 import axios from 'axios'
 
@@ -50,53 +81,59 @@ export default {
     name: "Signup",
     data(){
       return{
-        email:"",
-        username:"",
-        password:"",
-        confirmPassword:""   
+        singupData: {
+          email:"",
+          username:"",
+          password:"",
+          confirmPassword:""  
+        }
        }
     },
     methods:{
-      //sendSignup envoi le formulaire d'inscription à l'API
-      sendSignup () {
-        let token = ""
-        if (this.email == "" || this.username == "" || this.password == ""  ){
-          alert('Vous n\'avez pas bien rempli le formulaire !')
+
+      //checkForm envoi le formulaire d'inscription à l'API
+      checkForm: function () {
+
+        
+        // Si l'un des champs est nul 
+        if (!this.singupData.email || !this.singupData.username || !this.singupData.password || !this.singupData.confirmPassword ){
+          alert('Champ requis !')
         }
-        else if (this.password != this.confirmPassword){
+
+        // Si les deux mots de passe de correspondent pas
+        else if (this.singupData.password != this.singupData.confirmPassword){
           alert('Les mots de passe saisis ne sont pas identiques !')
         }
+        else if (!this.validEmail(this.singupData.email)) {
+        alert('Valid email required !')
+        }
+        // Méthode POST envoi les infos à la DATABASE
         else {
-          axios.post('http://localhost:3000/api/signup', {
-            email: this.email,
-            username: this.username,
-            password: this.password,
-          },
-          {
-            headers: {
-              'Content-type': 'application/json',
-              'Authorization': `Bearer${token}`
-                }
-          })
+          alert('Cest bon');
+          axios.post( 'http://localhost:3000/api/signup', this.singupData )
+            
+          //On traite la suite une fois la réponse obtenue 
           .then(function (response) {
-            //On traite la suite une fois la réponse obtenue 
             console.log(reponse);
             let reponse = response.data;
             let userObject = JSON.stringify(reponse);
             this.$localStorage.set('user', userObject)
-            let user = JSON.parse(this.$localStorage.get('user'));
-            token = user.token;//Token d'authentification
-            alert('Félicitation vous êtes désormais inscrit, connectez-vous dès maintenant')
-            window.location.href = "http://localhost:8080//#/signup"
+            alert('Votre inscription est validée !')
+            window.location.href = "http://localhost:3000//#/singin"
           })
+
+          //On traite ici les erreurs éventuellement survenues
           .catch(function (erreur) {
-            //On traite ici les erreurs éventuellement survenues
             console.log(erreur);
           })
         }
       },
+      validEmail: function (email) {
+      var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
+      },
       verif: function() {//Fonction de vérification du password
-        if (this.password != this.password2){
+        if (this.singupData.confirmPassword != this.singupData.confirmPassword){
           document.getElementById('confirm').innerHTML = 'Veuillez entrer le même mot de passe'
         } else {
           document.getElementById('confirm').innerHTML = ''

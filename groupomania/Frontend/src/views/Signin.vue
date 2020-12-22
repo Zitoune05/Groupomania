@@ -14,13 +14,6 @@
         <b-form-input type="password" class="text-password" aria-describedby="password-help-block" style="max-width: 300px; margin: auto;"></b-form-input>
       </b-form>
     </section>
-
-    <section>
-      <b-form @submit.stop.prevent>
-        <label for="text-password">Confirm Password</label>
-        <b-form-input type="password" class="text-password" aria-describedby="password-help-block" style="max-width: 300px; margin: auto;"></b-form-input>
-      </b-form>
-    </section><hr>
     
     <b-button variant="outline-primary">CONNEXION</b-button>
     

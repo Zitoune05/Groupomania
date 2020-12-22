@@ -21,8 +21,11 @@ schemaPassWord
 
 
 //Création de la base de donné
-exports.createDataBase = (req, res, next) => {
-    let databaseCreate = 'CREATE DATABASE Groupomnia';
+exports.createDbNamed   = (req, res, next) => {
+
+    // Variable databaseCreate -- > SQL
+    let databaseCreate = 'CREATE DATABASE Groupomnia';    
+
     databaseConnected.query(databaseCreate, (err, result) => {
         if (err) throw err;
         console.log(result)
@@ -32,16 +35,22 @@ exports.createDataBase = (req, res, next) => {
 
 //Création de la table user 
 exports.createDataTable = (req, res) => {
+    
+    // Variable table -- > SQL
     let table = 'CREATE TABLE user  ( id int NOT NULL AUTO_INCREMENT, email varchar(100) NOT NULL, username  varchar(100) NOT NULL,password varchar(250) NOT NULL, isAdmin tinyint NOT NULL DEFAULT 0 ,PRIMARY KEY (id),UNIQUE KEY id_UNIQUE (id),UNIQUE KEY email_UNIQUE (email),UNIQUE KEY username_UNIQUE (username))ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8';
+    
     databaseConnected.query(table, (err, result) => {
         if (err) throw err
         console.log(result)
         res.send('table created !')
     });
+
 };
 
 // Fonction d'inscription
-exports.signup = (req, res, next) => {          
+exports.signup = (req, res, next) => {  
+console.log("signup recu");  
+
     if (!emailValidator.validate(req.body.email) || !schemaPassWord.validate(req.body.password)) {              //Si l'email ou le mot de passe est invalide alors           
         res.status(400).json({ message : ' Votre email ou mot de passe est invalide. Veuillez réessayer !'});   // Affiche un status et message d'erreur
     } 
@@ -54,7 +63,7 @@ exports.signup = (req, res, next) => {
             password: hash,
         });
         // Insertion dans notre DataBase
-        database.query(`INSERT INTO user SET ?`, user, (err, result, field) => {      // src : https://www.w3schools.com/nodejs/nodejs_mysql_insert.asp
+        databaseConnected.query(`INSERT INTO user SET ?`, user, (err, result, field) => {      // src : https://www.w3schools.com/nodejs/nodejs_mysql_insert.asp
             if (err) {
                 console.log(err)
                 return res.status(400).json("erreur")
@@ -66,15 +75,10 @@ exports.signup = (req, res, next) => {
     }
 };
 
-database.connect(function(err) {
-    if (err) throw err;
-    con.query("SELECT * FROM customers", function (err, result, fields) {
-      if (err) throw err;
-      console.log(result);
-    });
-  });
 // Fonction de connexion
-exports.login = (req, res, next) => {           
+exports.login = (req, res, next) => {       
+    console.log("login recu");  
+
     User.findOne({ email: req.body.email })     // Méthode findOne pour trouver l'utilisateur dans la base de donnée correspondant à l'adresse mail envoyé dans la requête 
         .then(user => {
             if (!user) {                        // Si l'utilisateur n'est pas trouvé dans la base de donnée
@@ -98,3 +102,17 @@ exports.login = (req, res, next) => {
         })
         .catch(error => res.status(500).json({ error }));       //Erreur serveur
 };
+
+
+  //Affichage de tous les utilisateurs
+  exports.getUsers = (req, res, next) => {
+    databaseConnected.query(
+      'SELECT id, username, isAdmin, email FROM user WHERE isAdmin=0',
+      function (error, results) {
+        if (error) {
+          return res.status(400).json(error)
+        }
+        return res.status(200).json( results )
+      }
+    )
+  }
