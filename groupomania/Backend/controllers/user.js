@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');                        //Package pour crée
 const emailValidator = require('email-validator');          //plugin de validation d'email
 const passWordValidator = require('password-validator');    //plugin de validation de mot de passe
 
-const databaseConnected = require("../mysqlconfig");
+const connection = require("../sequelize-configuration");               // require de la configuration mysql
 
 let schemaPassWord = new passWordValidator();   // variable de validation de mot de passe
 
@@ -20,17 +20,17 @@ schemaPassWord
 
 
 
-//Création de la base de donné
+//Création DB
 exports.createDbNamed   = (req, res, next) => {
 
-    // Variable databaseCreate -- > SQL
-    let databaseCreate = 'CREATE DATABASE Groupomnia';    
+    // Variable en SQL
+    let sql = 'CREATE DATABASE groupomnia';    
 
-    databaseConnected.query(databaseCreate, (err, result) => {
+    connection.query(sql, (err, result) => {
         if (err) throw err;
-        console.log(result)
-        res.send('databse created')
-  });
+        console.log(result);
+        res.send('database created');
+    });
 };
 
 //Création de la table user 
@@ -39,7 +39,7 @@ exports.createDataTable = (req, res) => {
     // Variable table -- > SQL
     let table = 'CREATE TABLE user  ( id int NOT NULL AUTO_INCREMENT, email varchar(100) NOT NULL, username  varchar(100) NOT NULL,password varchar(250) NOT NULL, isAdmin tinyint NOT NULL DEFAULT 0 ,PRIMARY KEY (id),UNIQUE KEY id_UNIQUE (id),UNIQUE KEY email_UNIQUE (email),UNIQUE KEY username_UNIQUE (username))ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8';
     
-    databaseConnected.query(table, (err, result) => {
+    connection.query(table, (err, result) => {
         if (err) throw err
         console.log(result)
         res.send('table created !')
@@ -49,7 +49,8 @@ exports.createDataTable = (req, res) => {
 
 // Fonction d'inscription
 exports.signup = (req, res, next) => {  
-console.log("signup recu");  
+    
+    console.log("signup recu");  
 
     if (!emailValidator.validate(req.body.email) || !schemaPassWord.validate(req.body.password)) {              //Si l'email ou le mot de passe est invalide alors           
         res.status(400).json({ message : ' Votre email ou mot de passe est invalide. Veuillez réessayer !'});   // Affiche un status et message d'erreur
@@ -63,7 +64,7 @@ console.log("signup recu");
             password: hash,
         });
         // Insertion dans notre DataBase
-        databaseConnected.query(`INSERT INTO user SET ?`, user, (err, result, field) => {      // src : https://www.w3schools.com/nodejs/nodejs_mysql_insert.asp
+        connection.query(`INSERT INTO user SET ?`, user, (err, result, field) => {      // src : https://www.w3schools.com/nodejs/nodejs_mysql_insert.asp
             if (err) {
                 console.log(err)
                 return res.status(400).json("erreur")
@@ -104,9 +105,9 @@ exports.login = (req, res, next) => {
 };
 
 
-  //Affichage de tous les utilisateurs
-  exports.getUsers = (req, res, next) => {
-    databaseConnected.query(
+//Affichage de tous les utilisateurs
+exports.getUsers = (req, res, next) => {
+    connection.query(
       'SELECT id, username, isAdmin, email FROM user WHERE isAdmin=0',
       function (error, results) {
         if (error) {
@@ -114,5 +115,5 @@ exports.login = (req, res, next) => {
         }
         return res.status(200).json( results )
       }
-    )
-  }
+    );
+};
