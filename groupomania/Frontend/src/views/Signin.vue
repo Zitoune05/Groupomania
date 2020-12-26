@@ -1,21 +1,39 @@
 <template>
   <b-card tag="article" style="max-width: 35rem;" class="container mt-2 shadow ">
 
-    <section class="mt-3">
-      <b-form  @submit.stop.prevent>
-        <label for="feedback-user">User ID</label>
-        <b-form-input  id="feedback-user" style="max-width: 300px; margin: auto;"></b-form-input>
-      </b-form>
-    </section>
-    
-    <section>
-      <b-form @submit.stop.prevent>
-        <label for="text-password">Password</label>
-        <b-form-input type="password" class="text-password" aria-describedby="password-help-block" style="max-width: 300px; margin: auto;"></b-form-input>
-      </b-form>
-    </section>
-    
-    <b-button variant="outline-primary">CONNEXION</b-button>
+    <form method="POST" @submit.prevent = "envoi">
+
+      <section class="mt-3">
+        <b-form  @submit.stop.prevent>
+          <label for="feedback-user">Pseudo</label>
+          <b-form-input  
+            type="text"
+            id="feedback-user" 
+            style="max-width: 300px; margin: auto;"
+            v-model="username"
+          >
+          </b-form-input>
+        </b-form>
+      </section>
+      
+      <section>
+        <b-form @submit.stop.prevent>
+          <label for="text-password">Password</label>
+          <b-form-input 
+            type="password" 
+            class="text-password" 
+            aria-describedby="password-help-block" 
+            style="max-width: 300px; margin: auto;"
+            v-model="password"
+          >
+          </b-form-input>
+        </b-form>
+      </section>
+      
+      <b-button type="submit" variant="outline-primary">CONNEXION</b-button>
+
+    </form>
+
     
     <hr>
     <p>Pas encore inscrit ? 
@@ -30,10 +48,38 @@
   </b-card>
 </template>
 <!--v-model="userId" :state="validation"--> 
+
+
 <script>
+import axios from "axios";
 
 export default {
-    name: "Signin"
+  name: "connexion",
+  data() {
+    return {
+      username: "",
+      password: ""
+    };
+  },
+  methods: {
+        logIn() {
+            if ( this.username !== null || this.password !== null ) {
+                axios
+                    .post(
+                        "http://localhost:3000/api/auth/login",
+                        { username: this.username, password: this.password }
+                    )
+                    .then((response) => {
+                        localStorage.setItem("token", response.data.token);
+                        location.replace(location.origin);
+                    })
+                    .catch((error) => console.log(error));
+            } else {
+                console.log("Erreur est survenue !");
+            }
+        },
+  }
+ 
 };
 </script>
 

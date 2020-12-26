@@ -14,7 +14,7 @@
           <label for="email">Email</label>
           <b-form-input 
             id="email"
-            v-model="singupData.email"
+            v-model="signupData.email"
             style="max-width: 300px; margin: auto;"  
             type="email" 
             aria-describedby="password-help-block" >
@@ -27,7 +27,7 @@
           <label for="username">Pseudo</label>
           <b-form-input 
             id="username"
-            v-model="singupData.username"  
+            v-model="signupData.username"  
             style="max-width: 300px; margin: auto;"
             type="text">
           </b-form-input>
@@ -39,7 +39,7 @@
           <label for="password">Password</label>
           <b-form-input 
             id="password"
-            v-model="singupData.password"   
+            v-model="signupData.password"   
             type="password" 
             class="text-password" 
             aria-describedby="password-help-block" 
@@ -53,7 +53,7 @@
           <label for="confirmPassword">Confirm Password</label>
           <b-form-input 
             id="confirmPassword"
-            v-model="singupData.confirmPassword"  
+            v-model="signupData.confirmPassword"  
             type="password" 
             class="text-password" 
             aria-describedby="password-help-block" 
@@ -81,7 +81,7 @@ export default {
     name: "Signup",
     data(){
       return{
-        singupData: {
+        signupData: {
           email:"",
           username:"",
           password:"",
@@ -96,47 +96,30 @@ export default {
 
         
         // Si l'un des champs est nul 
-        if (!this.singupData.email || !this.singupData.username || !this.singupData.password || !this.singupData.confirmPassword ){
+        if (!this.signupData.email || !this.signupData.username || !this.signupData.password || !this.signupData.confirmPassword ){
           alert('Champ requis !')
         }
 
         // Si les deux mots de passe de correspondent pas
-        else if (this.singupData.password != this.singupData.confirmPassword){
+        else if (this.signupData.password != this.signupData.confirmPassword){
           alert('Les mots de passe saisis ne sont pas identiques !')
-        }
-        else if (!this.validEmail(this.singupData.email)) {
-        alert('Valid email required !')
         }
         // Méthode POST envoi les infos à la DATABASE
         else {
           alert('Cest bon');
-          axios.post( 'http://localhost:3000/api/signup', this.singupData )
+          axios.post( 'http://localhost:3000/api/signup', this.signupData )
             
           //On traite la suite une fois la réponse obtenue 
           .then(function (response) {
-            console.log(reponse);
-            let reponse = response.data;
-            let userObject = JSON.stringify(reponse);
-            this.$localStorage.set('user', userObject)
+            console.log(response);
             alert('Votre inscription est validée !')
-            window.location.href = "http://localhost:3000//#/singin"
+            location.replace(location.origin);
           })
 
           //On traite ici les erreurs éventuellement survenues
           .catch(function (erreur) {
-            console.log(erreur);
+            console.log("erreur d'inscription" + erreur);
           })
-        }
-      },
-      validEmail: function (email) {
-      var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return re.test(email);
-      },
-      verif: function() {//Fonction de vérification du password
-        if (this.singupData.confirmPassword != this.singupData.confirmPassword){
-          document.getElementById('confirm').innerHTML = 'Veuillez entrer le même mot de passe'
-        } else {
-          document.getElementById('confirm').innerHTML = ''
         }
       }
     }

@@ -2,9 +2,9 @@
   <div>
     <b-container fluid  id="feed">
 
-      <b-row>
+      <b-row style="border: red 1px solid">
         <!----------  IF not connected ------------->
-          <Signin/>
+          <AppCard/>
         
        <!----------- ELSE APP card  ------------->
       </b-row>
@@ -16,12 +16,12 @@
 
 <script>
 // @ is an alias to /src
-import Signin from './Signin.vue'
+import AppCard from '../components/Posts/AppCard';
 
 export default {
   name: 'Home',
   components: {
-    Signin
+    AppCard
   }
 }
 </script>

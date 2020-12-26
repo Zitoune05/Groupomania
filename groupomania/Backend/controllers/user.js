@@ -24,12 +24,12 @@ schemaPassWord
 exports.createDbNamed   = (req, res, next) => {
 
     // Variable databaseCreate -- > SQL
-    let databaseCreate = 'CREATE DATABASE Groupomnia';    
+    let databaseCreate = 'CREATE DATABASE groupomnia';    
 
     databaseConnected.query(databaseCreate, (err, result) => {
         if (err) throw err;
         console.log(result)
-        res.send('databse created')
+        res.send('base de donnée créée !')
   });
 };
 
@@ -42,7 +42,7 @@ exports.createDataTable = (req, res) => {
     databaseConnected.query(table, (err, result) => {
         if (err) throw err
         console.log(result)
-        res.send('table created !')
+        res.send('table users !')
     });
 
 };
@@ -63,12 +63,13 @@ console.log("signup recu");
             password: hash,
         });
         // Insertion dans notre DataBase
-        databaseConnected.query(`INSERT INTO user SET ?`, user, (err, result, field) => {      // src : https://www.w3schools.com/nodejs/nodejs_mysql_insert.asp
+        let sqlSingup = `INSERT INTO user SET ?`;
+        databaseConnected.query(sqlSingup, user, (err, result, field) => {      // src : https://www.w3schools.com/nodejs/nodejs_mysql_insert.asp
             if (err) {
                 console.log(err)
                 return res.status(400).json("erreur")
             }
-            return res.status(201).json({message : 'Votre compte a bien été crée !'},)
+            return res.status(201).json({message : ' Inscription réussi !'},)
         });
     })
         .catch(error => res.status(500).json({ error }));   

@@ -17,22 +17,22 @@ const limiteur = rateLimit({
     max: 100,                                       // limite chaque IP à 3 requêtes par fenêtre
     message: "Vous avez été bloqué parceque vous vous êtes trompé 3 fois. Réessayer dans 15 minutes !"
 });
-  
-app.use(limiteur);
+
+app.use(bodyParser.json());                     //Transforme le corp de la requête en object Javascript utilisable 
+
+app.use((req, res, next) => {                   // Donne l'accès du backend au frontend                                
+res.setHeader('Access-Control-Allow-Origin', '*');
+res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
+res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+next();
+});
+
+app.use( limiteur );
 
 app.use(xss());
 
-app.use((req, res, next) => {                   // Donne l'accès du backend au frontend                                
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-    next();
-});
-
-
 app.use(helmet());
 app.use('/image', express.static(path.join(__dirname,'images')));
-app.use(bodyParser.json());                     //Transforme le corp de la requête en object Javascript utilisable 
 
 app.use('/api/auth' ,userRoutes);
 app.use('/api/publication', publicationRoutes);

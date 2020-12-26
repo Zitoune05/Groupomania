@@ -34,7 +34,6 @@ export default {
                         </template>
 
                         <b-dropdown-item href="#">Create post</b-dropdown-item>
-                        <b-dropdown-item href="#">Style 9GAG</b-dropdown-item>
 
                     </b-nav-item-dropdown>
 
@@ -54,6 +53,12 @@ export default {
                         <b-dropdown-item>
                             <router-link to="/myaccount">
                                 Mon Profil
+                            </router-link>
+                        </b-dropdown-item>
+
+                        <b-dropdown-item>
+                            <router-link to="/signin">
+                                Se connecter
                             </router-link>
                         </b-dropdown-item>
 
