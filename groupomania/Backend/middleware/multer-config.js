@@ -17,4 +17,5 @@ const storage = multer.diskStorage({            // Fonction diskStorage pour enr
     }
 });
 
-module.exports = multer({ storage }).single('image');       // On exporte notre middlewares en lui passant notre constante storage et lui indiquons que nous gérerons uniquement les téléchargements de fichiers image
+// On exporte notre middlewares en lui passant notre constante storage et lui indiquons que nous gérerons uniquement les téléchargements de fichiers image
+module.exports = multer({ storage }).single('image');       

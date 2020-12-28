@@ -3,11 +3,14 @@ const router = express.Router();                            //Création d'un rou
 
 const publicationCtrl = require('../controllers/publication');
 
-router.get('/', publicationCtrl.getAllpublications );              // Création des routes pour différentes requêtes 
-router.post('/',publicationCtrl.createpublication );
-router.post('/:id/like',publicationCtrl.likeCtrl );
-router.get('/:id', publicationCtrl.getOnepublication );
-router.put('/:id',publicationCtrl.modifypublication );
-router.delete('/:id',publicationCtrl.deletepublication );
+const auth = require('../middleware/auth');
+const multer = require('../middleware/multer-config');
+
+// Création des routes pour les différentes requêtes 
+// router.get('/', auth, publicationCtrl.getAllPublication);
+// router.get('/:id', auth, publicationCtrl.getOnePublication);
+router.post('/new', auth, multer, publicationCtrl.createMessage);
+// router.put('/:id', auth, multer, publicationCtrl.modifyPublication);
+// router.delete('/:id', auth, publicationCtrl.deletePublication);
 
 module.exports = router;

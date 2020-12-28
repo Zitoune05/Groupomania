@@ -8,17 +8,25 @@ const path = require('path');                     // Pour gérer nos images
 const userRoutes = require('./routes/user');      // Récupération des routes
 const publicationRoutes = require('./routes/publication');
 
-require('dotenv').config();                     // protéger les clés du serveur mongoDB
+require("./dbConfig");                          // Connection a la base de donnée
 
 const app = express();
+
+//test
+app.get('/', function (req,res) { 
+    res.setHeader('Content-type','text/html');
+    res.status(200).send('<h1>Bienvenue sur le serveur</h1>');
+});
 
 const limiteur = rateLimit({
     windowMs: 15 * 60 * 1000,                       // 15 minutes
     max: 100,                                       // limite chaque IP à 3 requêtes par fenêtre
     message: "Vous avez été bloqué parceque vous vous êtes trompé 3 fois. Réessayer dans 15 minutes !"
 });
+app.use( limiteur );
 
-app.use(bodyParser.json());                     //Transforme le corp de la requête en object Javascript utilisable 
+
+app.use(xss());
 
 app.use((req, res, next) => {                   // Donne l'accès du backend au frontend                                
 res.setHeader('Access-Control-Allow-Origin', '*');
@@ -27,14 +35,11 @@ res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OP
 next();
 });
 
-app.use( limiteur );
-
-app.use(xss());
-
 app.use(helmet());
 app.use('/image', express.static(path.join(__dirname,'images')));
-
-app.use('/api/auth' ,userRoutes);
-app.use('/api/publication', publicationRoutes);
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());                     //Transforme le corp de la requête en object Javascript utilisable 
+app.use('/api/' ,userRoutes);
+app.use('/api/', publicationRoutes);
 
 module.exports = app;

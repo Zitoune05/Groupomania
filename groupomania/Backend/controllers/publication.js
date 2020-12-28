@@ -1,42 +1,46 @@
 const publication = require('../models/publication');           //On récupére le modèl type d'une publication
+const jwt = require('jsonwebtoken');                        //Package pour créer des jetons uniques
+const models = require('../models/index.js');
+const { sequelize } = require('../models/index.js');
 
 exports.getAllpublications = (req, res, next) => {        // Récupère toutes les publications dans la base de données pour les affichers
-  publication.find().then(
-    (publications) => {
-      res.status(200).json(publications);
-    }
-  ).catch(
-    (error) => {
-      res.status(400).json({
-        error: error
-      });
-    }
-  )
-  .catch((error) => { res.status(500).json({error: error});});
+
+  models.Publication.findAll({ 
+    order: sequelize.literal('updatedAt DESC'), 
+    include :{ model: models.User, attributes: ["username"]}
+  })
+  .then(() => res.status(200).json( message))
+  .catch(() => res.status(400).json( error))
 };
 
-exports.createpublication = (req, res, next) => {         // Création de publication sur la base de données
-    const publicationObject = JSON.parse(req.body.publication); // On obtiens les informations par rapports aux valeurs d'entrée
-    const publication = new publication({                       // Ces valeurs d'entrée sont placées dans un élément publication
-        ...publicationObject,
-        imageUrl : `${req.protocol}://${req.get('host')}/image/${req.file.filename}`
-    });
-    publication.save()                                    // méthode save pour enregistrer la publication dans la base de donnée
+exports.createMessage = (req, res, next) => {
+  
+  const token = req.headers.authorization.split(" ")[1];          // Token attribué à l'utilisateur
+  const decodedToken = jwt.verify(token, process.env.TOKEN);      // Token comparé 
+  const userId = decodedToken.userId; 
+
+  // Params
+  let title = req.body.title;
+  let content = req.body.content;
+
+  if (title == null || content == null) {
+    return res.status(400).json({ 'error': 'Paramètres manquants ' });
+  }
+
+  models.User.findOne({attributes: [ "id" ], where: { id: userId } })
     .then(
-      () => {
-        res.status(201).json({                      
-          message: 'publication bien créée !'
-        });
-      }
-    ).catch(
-      (error) => {
-        res.status(400).json({                      // Affiche un status et message d'erreur
-          error: error,
-          message : "la publication n'a pas pu etre créée !"  
-        });
-      }
+      models.Publication.create({
+        UserId : userId,
+        title : req.body.title,
+        content : req.body.content,
+        attachment : req.body.attachment,
+        likes : 0,
+      })
+      .then((response) => res.status(200).json({ response : " Publication envoyée avec succé !" }))     
+      .catch((err) => res.status(401).json({ err })) 
     )
-    .catch((error) => { res.status(500).json({error: error});});  //Erreur serveur
+    .catch(() => res.status(500).json({ 'error': 'unable to verify user' }))
+
 };
   
 exports.getOnepublication= (req,res,next) => {            // Charge les informations de la publication selectionnée
