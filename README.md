@@ -8,11 +8,11 @@ Frontend avec le framework JS Vue.js.
 
 -------------------------------------
 cd frontend :
-npm install
+npm install-----
 npm run serve
 
 cd backend : 
-npm -i nodemon 
+npm -i nodemon-----
 nomdemon server
 
 ------------------------------------
