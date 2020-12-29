@@ -13,7 +13,7 @@ npm run serve
 
 cd backend : 
 npm -i nodemon  puis
-nomdemon server
+nodemon server
 
 ------------------------------------
 
