@@ -3,7 +3,8 @@ const multer = require('multer');               // Package qui nous permet de g�
 const MIME_TYPES = {                            // On définis les formats authorisés 
   'image/jpg': 'jpg',
   'image/jpeg': 'jpg',
-  'image/png': 'png'
+  'image/png': 'png',
+  'image/gif':  'gif',
 };
 
 const storage = multer.diskStorage({            // Fonction diskStorage pour enregistrer sur le disk

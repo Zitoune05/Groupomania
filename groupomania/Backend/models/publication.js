@@ -1,5 +1,6 @@
+'use strict';
+
 module.exports = (sequelize, DataTypes) => {
-  'use strict';
   const Publication = sequelize.define(
       'Publication', {
           title: DataTypes.STRING,
