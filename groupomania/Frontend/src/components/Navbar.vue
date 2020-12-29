@@ -57,7 +57,7 @@ export default {
                         </b-dropdown-item>
 
                         <b-dropdown-item>
-                            <router-link to="/signin">
+                            <router-link to="/login">
                                 Se connecter
                             </router-link>
                         </b-dropdown-item>

@@ -110,14 +110,14 @@ export default {
           axios.post( 'http://localhost:3000/api/signup', this.signupData )
             
           //On traite la suite une fois la réponse obtenue 
-          .then(function (response) {
+          .then((response) => {
             console.log(response);
             alert('Votre inscription est validée !')
             location.replace(location.origin);
           })
 
           //On traite ici les erreurs éventuellement survenues
-          .catch(function (erreur) {
+          .catch((erreur) => {
             console.log("erreur d'inscription" + erreur);
           })
         }

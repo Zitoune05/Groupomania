@@ -45,7 +45,6 @@ exports.signup = (req, res, next) => {
 // Fonction de connexion
 exports.login = (req, res, next) => {    
     
-    const User = models.User;
     let email    = req.body.email;
     let password = req.body.password;
     let TOKEN = process.env.TOKEN;

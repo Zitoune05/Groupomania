@@ -4,7 +4,7 @@
 
       <b-row style="border: red 1px solid">
         <!----------  IF not connected ------------->
-          <AppCard/>
+          <CardPost/>
         
        <!----------- ELSE APP card  ------------->
       </b-row>
@@ -16,12 +16,12 @@
 
 <script>
 // @ is an alias to /src
-import AppCard from '../components/Posts/AppCard';
+import CardPost from '../components/Posts/CardPost';
 
 export default {
   name: 'Home',
   components: {
-    AppCard
+    CardPost
   }
 }
 </script>
