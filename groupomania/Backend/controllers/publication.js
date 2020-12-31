@@ -6,11 +6,8 @@ exports.getAllpublications = (req, res, next) => {
 
   models.Publication.findAll({ 
     order: [['createdAt', 'DESC']], 
-    include: {
-      model: models.User,
-      attributes: ['username']
-    }}
-  )
+    attributes: [ 'userId','content', 'title', 'imageUrl', "likes", "createdAt"],
+  })
   .then((publications) => res.status(200).json(publications))
   .catch(error => res.status(400).json({ error: "gettallpublication", error: error }));                                  
 };
@@ -20,7 +17,7 @@ exports.getAllpublications = (req, res, next) => {
 exports.getOnePublication = (req, res, next) => {
 
   models.Publication.findOne({
-    attributes: [ 'content', 'title', 'imageUrl', "likes"]
+    attributes: [ 'userId','content', 'title', 'imageUrl', "likes"],
   })
   .then((publication) => res.status(200).json( publication))
   .catch(error => res.status(400).json({ error: "getOnePublication", error: error }));   
@@ -47,6 +44,7 @@ exports.createMessage = (req, res, next) => {
     .then(
       models.Publication.create({
         UserId : userId,
+        username: models.User.username,
         title : title,
         content : content,
         imageUrl : imageUrl,

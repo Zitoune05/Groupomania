@@ -14,7 +14,7 @@
           <label for="email">Email</label>
           <b-form-input 
             id="email"
-            v-model="signupData.email"
+            v-model="email"
             style="max-width: 300px; margin: auto;"  
             type="email" 
             aria-describedby="password-help-block" >
@@ -27,7 +27,7 @@
           <label for="username">Pseudo</label>
           <b-form-input 
             id="username"
-            v-model="signupData.username"  
+            v-model="username"  
             style="max-width: 300px; margin: auto;"
             type="text">
           </b-form-input>
@@ -39,7 +39,7 @@
           <label for="password">Password</label>
           <b-form-input 
             id="password"
-            v-model="signupData.password"   
+            v-model="password"   
             type="password" 
             class="text-password" 
             aria-describedby="password-help-block" 
@@ -53,7 +53,7 @@
           <label for="confirmPassword">Confirm Password</label>
           <b-form-input 
             id="confirmPassword"
-            v-model="signupData.confirmPassword"  
+            v-model="confirmPassword"  
             type="password" 
             class="text-password" 
             aria-describedby="password-help-block" 
@@ -81,13 +81,11 @@ export default {
     name: "Signup",
     data(){
       return{
-        signupData: {
-          email:"",
-          username:"",
-          password:"",
-          confirmPassword:""  
-        }
-       }
+        email:"",
+        username:"",
+        password:"",
+        confirmPassword:""  
+      }
     },
     methods:{
 
@@ -96,23 +94,25 @@ export default {
 
         
         // Si l'un des champs est nul 
-        if (!this.signupData.email || !this.signupData.username || !this.signupData.password || !this.signupData.confirmPassword ){
+        if (!this.email || !this.username || !this.password || !this.confirmPassword ){
           alert('Champ requis !')
         }
 
         // Si les deux mots de passe de correspondent pas
-        else if (this.signupData.password != this.signupData.confirmPassword){
+        else if (this.password != this.confirmPassword){
           alert('Les mots de passe saisis ne sont pas identiques !')
         }
         // Méthode POST envoi les infos à la DATABASE
         else {
           alert('Cest bon');
-          axios.post( 'http://localhost:3000/api/signup', this.signupData )
+          axios.post( 'http://localhost:3000/api/signup', (this.confirmPassword, this.email) )
             
           //On traite la suite une fois la réponse obtenue 
           .then((response) => {
             console.log(response);
             alert('Votre inscription est validée !')
+            localStorage.setItem("username", response.data.username)
+            localStorage.setItem("email", response.data.email)
             location.replace(location.origin);
           })
 

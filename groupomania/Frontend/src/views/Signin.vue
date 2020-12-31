@@ -62,13 +62,13 @@ export default {
   methods: {
     login: function()  {
       if ( this.email !== null || this.password !== null) {
-        axios.post("http://localhost:3000/api/auth/login",
+        axios.post("http://localhost:3000/api/login",
           { email: this.email, password: this.password}
         )
         .then((response) => {
-          localStorage.setItem("token", response.data.token);
-          localStorage.setItem(response.data.userId);
-          location.replace(location.origin);
+          localStorage.setItem("token", response.data.token)
+          localStorage.setItem("userId", response.data.userId)
+          location.replace(location.origin)
         })
         .catch((error) => console.log(error))
       } 

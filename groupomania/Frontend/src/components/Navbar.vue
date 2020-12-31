@@ -33,7 +33,12 @@ export default {
                             <b-icon icon="chat-left-dots-fill" scale="1.2" variant="light"></b-icon>
                         </template>
 
-                        <b-dropdown-item href="#">Create post</b-dropdown-item>
+                         <b-dropdown-item>
+                            <router-link to="/createpost">
+                                Create post
+                            </router-link>
+                        </b-dropdown-item>
+
 
                     </b-nav-item-dropdown>
 
@@ -51,7 +56,7 @@ export default {
                         </b-dropdown-item>
 
                         <b-dropdown-item>
-                            <router-link to="/myaccount">
+                            <router-link to="/profil">
                                 Mon Profil
                             </router-link>
                         </b-dropdown-item>

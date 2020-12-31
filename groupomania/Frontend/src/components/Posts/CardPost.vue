@@ -1,31 +1,30 @@
 <template>
   <div class="mx-auto">
-    
-    <b-card tag="article" style="max-width: 35rem;" class="mb-2 shadow" >
 
+    <b-card tag="article" class="mb-2 shadow " v-for="publication in Publications" :key="publication.id">
+      
       <template #header>
          <div class="headerPost">
-            <b-avatar id='CardUserImage' src="https://placekitten.com/300/300"></b-avatar>
-            <em>"date"  &  </em> 
-            <em>"heure"</em>
+            <b-avatar id='CardUserImage'></b-avatar>
+            <h2>{{publication.username}}</h2>
+            <!-- <em>{{ publication.createdAt.split(" ")[0] }}</em> -->
           </div>
       </template>
 
-      <b-card id="CardImagePosted"
-        img-src="https://scontent-cdt1-1.xx.fbcdn.net/v/t1.15752-9/131075760_229752241874821_3156199757893394385_n.png?_nc_cat=106&ccb=2&_nc_sid=ae9488&_nc_ohc=9oOqHw0i_B0AX_WrMlW&_nc_ht=scontent-cdt1-1.xx&oh=ac67c4f0486325277ee761ab46b1f4be&oe=5FF760F0"
-        img-alt="Mème"
-        img-top >
+      <b-card id="CardImagePosted" >
+        <img :src="'http://localhost:3000/images/' + publication.imageUrl" alt="image">
       </b-card>
 
       <b-card-text>
-        <p>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Libero aspernatur quisquam provident at repellat facere commodi vitae laudantium! Delectus, optio! Eaque rerum a animi sapiente vero recusandae officia fugit dolorum.
-        </p>
+        <p>{{publication.content}}</p>
       </b-card-text>
       
+      <hr>
       <template #footer >
-        <b-button href="#" style="margin-right: 2rem">Likes</b-button>
-        <b-button href="#" >Comments</b-button>
+        <div class="d-flex justify-content-around">
+          <b-icon icon="heart" style="color: red" class="mr-1"></b-icon>
+          <b-icon icon="card-text" style="color: rgb(97, 135, 170)" class="mr-1"></b-icon>
+        </div>
       </template>
 
     </b-card>
@@ -33,9 +32,36 @@
 </template>
 
 <script>
+import axios from "axios";
+
+
 export default {
-  name: 'AppCard'
-}
+  name: 'AppCard',
+  data() {
+        return {
+            user: "",
+            publication: {
+                username: "",
+                title: "",
+                content: "",
+                imageUrl: "",
+                userId: "",
+            },
+            Publications: [],
+            likes: 0,
+            hasBeenLiked: false,
+
+          
+        };
+    },
+    mounted() {
+        axios
+        .get("http://localhost:3000/api/publications/one", { headers: { Authorization: "Bearer " + localStorage.token }})
+        .then((response) => (this.publication = response))
+        .catch((err) => console.log(err));
+    },
+
+  }
 </script>
 
 <style >

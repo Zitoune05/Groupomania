@@ -7,7 +7,7 @@ const auth = require('../middleware/auth');
 const multer = require('../middleware/multer-config');
 
 // Création des routes pour les différentes requêtes 
-router.get('/publications/', auth, publicationCtrl.getAllpublications);
+router.get('/publications', auth, publicationCtrl.getAllpublications);
 router.get('/publications/one', auth, publicationCtrl.getOnePublication);
 router.post('/new', auth, multer, publicationCtrl.createMessage);
 router.put('/publications/:id', auth, multer, publicationCtrl.modifypublication);

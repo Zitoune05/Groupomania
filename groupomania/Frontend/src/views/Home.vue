@@ -1,13 +1,11 @@
 <template>
   <div>
-    <b-container fluid  id="feed">
+    <b-container  id="feed">
 
-      <b-row style="border: red 1px solid">
         <!----------  IF not connected ------------->
-          <CardPost/>
+          <Wall/>
         
        <!----------- ELSE APP card  ------------->
-      </b-row>
 
     </b-container>
     
@@ -16,12 +14,12 @@
 
 <script>
 // @ is an alias to /src
-import CardPost from '../components/Posts/CardPost';
+import Wall from '../components/Posts/AllPosts';
 
 export default {
   name: 'Home',
   components: {
-    CardPost
+    Wall
   }
 }
 </script>
